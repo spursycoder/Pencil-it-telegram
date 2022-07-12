@@ -20,24 +20,46 @@ and get a sketch as a reply.
 
 def help(update,context):
     update.message.reply_text('''
-    nothing much to say for now
-just send an image and 
-get the sketched version of it
+    Here are the commands:
+/start-> to begin
+/help-> to list commands
+/about-> details about the bot
+/donate->details for donation
+/contact->developer details for contacting
+no need to give any command for the image conversion,
+just upload the image and watch the magic happen
     ''')
 
 def text_handler(update,context):
     update.message.reply_text('''
-    Kindly send an image to generate a sketch
+    Please send an image to generate a sketch
+or use /help command for help
     ''')
 
-def darken(update,context):
-    pass
+def donate(update,context):
+    update.message.reply_text('''
+    I know it's difficult times which is why I have made the bot free, but the bot also does have running costs which incase a certain quota exceeds, I have to pay.
+If you think you can make a contibution, it would go a long way in helping me and motivating me to do more projects like this.
+You can donate via the following links:
+Buy me a coffee-> https://www.buymeacoffee.com/dev.stephno
+Paypal-> https://paypal.me/aastlestephno
+For Indian users:
+UPI ID-> dev.stephno@apl
+Thank you :)
+    ''')
 
-def lighten(update,context):
-    pass
+def contact(update,context):
+    update.message.reply_text('''
+    You can contact me via the username @gl1tch1e in telegram
+Or hit me up via twitter-> https://twitter.com/dev_stephno
+    ''')
 
-def premium_check(update,context):
-    pass
+def about(update,context):
+    update.message.reply_text('''
+    This bot is built using python. It is absolutely free to use, however you can consider to /donate to help me cover the running costs.
+For better results please provide a high resolution image. If you want to fine tune your image, you can go to your local editor and increase the contrast while decreasing the brightness. It has proved to provide a more pencil-esque effect.
+If you encounter any bugs or have any suggestions, feel free to /contact me.
+    ''')
 
 
 
@@ -64,6 +86,9 @@ def main():
     disp=updater.dispatcher
     disp.add_handler(CommandHandler("start",start))
     disp.add_handler(CommandHandler("help",help))
+    disp.add_handler(CommandHandler("about",about))
+    disp.add_handler(CommandHandler("contact",contact))
+    disp.add_handler(CommandHandler("donate",donate))
     disp.add_handler(MessageHandler(Filters.photo,photo_handler))
     disp.add_handler(MessageHandler(Filters.text,text_handler))
     updater.start_polling()
