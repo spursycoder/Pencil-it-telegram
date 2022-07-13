@@ -26,7 +26,7 @@ def help(update,context):
 /about-> details about the bot
 /donate->details for donation
 /contact->developer details for contacting
-no need to give any command for the image conversion,
+No need to give any command for the image conversion,
 just upload the image and watch the magic happen
     ''')
 
@@ -61,6 +61,13 @@ For better results please provide a high resolution image. If you want to fine t
 If you encounter any bugs or have any suggestions, feel free to /contact me.
     ''')
 
+def doc_handler(update,context):
+    update.message.reply_text('''
+    Please send your image as a photo and not a document.
+Refer to the below image for better understanding.
+    ''')
+    context.bot.send_photo(chat_id=update.message.chat.id,photo=open("demo.png","rb"))
+
 
 
 def photo_handler(update,context):
@@ -91,6 +98,8 @@ def main():
     disp.add_handler(CommandHandler("donate",donate))
     disp.add_handler(MessageHandler(Filters.photo,photo_handler))
     disp.add_handler(MessageHandler(Filters.text,text_handler))
+    disp.add_handler(MessageHandler(Filters.document,doc_handler))
+
     updater.start_polling()
     updater.idle()
     
