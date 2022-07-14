@@ -4,6 +4,7 @@ from telegram.ext import MessageHandler, Filters
 import cv2
 from io import BytesIO
 import numpy as np
+import random
 
 def start(update,context):
 
@@ -55,10 +56,10 @@ Or hit me up via twitter-> https://twitter.com/dev_stephno
     ''')
 
 def about(update,context):
-    update.message.reply_text('''
-    This bot is built using python. It is absolutely free to use, however you can consider to /donate to help me cover the running costs.
-For better results please provide a high resolution image. If you want to fine tune your image, you can go to your local editor and increase the contrast while decreasing the brightness. It has proved to provide a more pencil-esque effect.
+    update.message.reply_text('''    
+    For better results please provide a high resolution image. If you want to fine tune your image, you can go to your local editor and adjust the contrast and brightness as per your desire. It has proved to provide a more pencil-esque depth effect.
 If you encounter any bugs or have any suggestions, feel free to /contact me.
+This bot is built using python. It is absolutely free to use, however you can consider to /donate to help me cover the running costs.
     ''')
 
 def doc_handler(update,context):
@@ -83,7 +84,14 @@ def photo_handler(update,context):
     invertedblur=cv2.bitwise_not(blur)
     sketch=cv2.divide(cnvrt,invertedblur,scale=230.0)
     cv2.imwrite("s.png",sketch)
-    context.bot.send_photo(chat_id=update.message.chat.id,photo=open("s.png","rb"))
+    context.bot.send_photo(chat_id=update.message.chat.id,photo=open("s.png","rb"),caption="Here is your sketched image. Hope you like it!. Not satisfied? Head over to /about section.")
+    if random.randint(1,2)==1:
+        update.message.reply_text('''
+        Liking the bot so far? If so, happy to know! 
+    Your contributions would go a long way in helping me cover the running costs. Go to /donate for more details.
+        ''')
+
+
 
     
 
