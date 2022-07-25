@@ -96,6 +96,7 @@ def photo_handler(update,context):
     
 
 def main():
+    TOKEN='5433195086:AAFR7DyUoR9z_4bor-lHGGeHHY3HqDUKo3Q'
     updater=Updater(TOKEN,use_context=True)
     disp=updater.dispatcher
     disp.add_handler(CommandHandler("start",start))
