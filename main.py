@@ -100,7 +100,8 @@ async def photo_handler(update: Update, context: CallbackContext):
 
 
 def main():
-    TOKEN = '5433195086:AAFR7DyUoR9z_4bor-lHGGeHHY3HqDUKo3Q'
+    f = open("token.txt", "r")
+    TOKEN = f.readline()
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help))
