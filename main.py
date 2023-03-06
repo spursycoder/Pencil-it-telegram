@@ -5,6 +5,7 @@ import cv2
 from io import BytesIO
 import numpy as np
 import random
+import os
 
 
 async def start(update: Update, context: CallbackContext):
@@ -100,9 +101,13 @@ async def photo_handler(update: Update, context: CallbackContext):
 
 
 def main():
-    f = open("token.txt", "r")
-    TOKEN = f.readline()
-    app = Application.builder().token(TOKEN).build()
+    # for local environment
+    # f = open("token.txt", "r")
+    # TOKEN = f.readline()
+    # for production environment
+    token = os.environ["TOKEN"]
+
+    app = Application.builder().token(token).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help))
     app.add_handler(CommandHandler("about", about))
