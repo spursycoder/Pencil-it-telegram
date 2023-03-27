@@ -8,6 +8,10 @@ import random
 import os
 
 
+async def healthz(update: Update, context: CallbackContext):
+    await update.message.reply_text('OK')
+
+
 async def start(update: Update, context: CallbackContext):
 
     await update.message.reply_text('''
@@ -116,6 +120,7 @@ def main():
     app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
     app.add_handler(MessageHandler(filters.TEXT, text_handler))
     app.add_handler(MessageHandler(filters.Document.ALL, doc_handler))
+    app.add_handler(MessageHandler(filters.regex('^/healthz$'), healthz))
 
     app.run_polling()
 

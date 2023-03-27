@@ -1,6 +1,34 @@
-version: "3.10"
-services:
-    worker:
-        build: .
-        environment:
-            - TOKEN=${TOKEN}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: pencil-it-bot
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: pencil-it-bot
+    template:
+        metadata:
+            labels:
+                app: pencil-it-bot
+        spec:
+            containers:
+                - name: pencil-it-bot
+                  # image: <your-image-url>
+                  env:
+                      - name: TOKEN
+                        value: ${TOKEN}
+                  readinessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: 8080
+                      initialDelaySeconds: 10
+                      periodSeconds: 5
+                  livenessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: 8080
+                      initialDelaySeconds: 10
+                      periodSeconds: 30
+                  ports:
+                      - containerPort: 8080
