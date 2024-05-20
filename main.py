@@ -4,8 +4,23 @@ from telegram import Update
 import cv2
 from io import BytesIO
 import numpy as np
+from flask import Flask, request
 import random
 import os
+
+app = Flask(__name__)
+
+# Define your bot and handlers as usual
+token = os.environ["TOKEN"]
+bot = telegram.Bot(token)
+app_telegram = Application.builder().token(token).build()
+
+# Webhook endpoint
+@app.route('/webhook', methods=['POST'])
+async def webhook():
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    await app_telegram.update_queue.put(update)
+    return 'ok'
 
 
 async def start(update: Update, context: CallbackContext):
@@ -100,25 +115,19 @@ async def photo_handler(update: Update, context: CallbackContext):
         ''')
 
 
-def main():
-    # for local environment
-    # f = open("token.txt", "r")
-    # TOKEN = f.readline()
-    # for production environment
-    token = os.environ["TOKEN"]
+app = Application.builder().token(token).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("help", help))
+app.add_handler(CommandHandler("about", about))
+app.add_handler(CommandHandler("contact", contact))
+app.add_handler(CommandHandler("donate", donate))
+app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
+app.add_handler(MessageHandler(filters.TEXT, text_handler))
+app.add_handler(MessageHandler(filters.Document.ALL, doc_handler))
 
-    app = Application.builder().token(token).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help))
-    app.add_handler(CommandHandler("about", about))
-    app.add_handler(CommandHandler("contact", contact))
-    app.add_handler(CommandHandler("donate", donate))
-    app.add_handler(MessageHandler(filters.PHOTO, photo_handler))
-    app.add_handler(MessageHandler(filters.TEXT, text_handler))
-    app.add_handler(MessageHandler(filters.Document.ALL, doc_handler))
-
-    app.run_polling()
 
 
 if __name__ == '__main__':
-    main()
+    loop = asyncio.get_event_loop()
+    loop.create_task(app_telegram.start())
+    app.run(host='0.0.0.0', port=8080)
